@@ -23,7 +23,7 @@ Cloud applications are complex with many moving parts. Monitoring provides data 
 ### Install npm module
 
 ```bash
-npm install azure-arm-insights
+npm install azure-arm-monitor
 ```
 
 ### Example
@@ -32,7 +32,7 @@ This snippet prints all the alerting rules associated with a resource group.
 
 ```javascript
 const msRestAzure = require('ms-rest-azure');
-const insightsManagementClient = require('azure-arm-insights');
+const monitorManagementClient = require('azure-arm-monitor');
 
 const subscriptionId = 'your-subscription-id';
 const resourceGroupName = 'your-resource-group-name';
@@ -40,13 +40,12 @@ const resourceGroupName = 'your-resource-group-name';
 msRestAzure
   .interactiveLogin()
   .then(credentials => {
-    const client = new insightsManagementClient(credentials, subscriptionId);
-    return client.alertRules.listByResourceGroup(resourceGroupName);
+    const client = new monitorManagementClient(credentials, subscriptionId);
+    client.alertRules.listByResourceGroup(resourceGroupName, rules => {
+      console.log('List of rules:');
+      console.dir(rules, { depth: null, colors: true });
+    })
   })
-  .then(rules => {
-    console.log('List of rules:');
-    console.dir(rules, { depth: null, colors: true });
-  });
 
 ```
 
